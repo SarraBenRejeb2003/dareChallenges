@@ -1,10 +1,9 @@
 package com.example.dareWheel.di
 
 import android.content.Context
-import com.example.dareWheel.challenge.data.ChallengeDatabase
 import com.example.dareWheel.challenge.data.ChallengeRepositoryImpl
 import com.example.dareWheel.challenge.domain.ChallengeRepository
-import com.example.dareWheel.player.data.PlayerDatabase
+import com.example.dareWheel.data.AppDatabase
 import com.example.dareWheel.player.data.PlayerRepositoryImpl
 import com.example.dareWheel.player.domain.PlayerRepository
 
@@ -16,12 +15,16 @@ interface AppContainer {
 
 class AppDataContainer(private val context: Context) : AppContainer {
 
+    private val appDatabase: AppDatabase by lazy {
+        AppDatabase.getDatabase(context)
+    }
+
     override val challengeRepository: ChallengeRepository by lazy {
-        ChallengeRepositoryImpl(ChallengeDatabase.getDatabase(context).challengedao)
+        ChallengeRepositoryImpl(appDatabase.challengeDao)
     }
 
     override val playerRepository: PlayerRepository by lazy {
-        PlayerRepositoryImpl(PlayerDatabase.getDatabase(context).playerdao)
+        PlayerRepositoryImpl(appDatabase.playerDao)
     }
 
     override val viewModelFactory: ViewModelFactory by lazy {
