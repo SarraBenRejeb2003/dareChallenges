@@ -1,5 +1,6 @@
 package com.example.dareWheel.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,28 +11,42 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.dareWheel.Challenge.data.Challenge
+import androidx.room.Room
+import com.example.dareWheel.challenge.data.ChallengeDTO
+import com.example.dareWheel.challenge.data.ChallengeDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ChallengeListScreen(navController: NavController, modifier: Modifier = Modifier) {
-    var challenges by remember { mutableStateOf(mutableListOf(
-        Challenge("Do 10 pushups"),
-        Challenge("Sing a song out loud"),
-        Challenge("Tell a joke"),
-        Challenge("Do a little dance"),
-        Challenge("Talk in a funny voice for 1 minute"),
-        Challenge("Try to lick your elbow"),
-        Challenge("Balance a spoon on your nose for 10 seconds"),
-        Challenge("Make a funny face and keep it for 1 minute"),
-    )) }
+    var challenges by remember { mutableStateOf(emptyList<ChallengeDTO>()) }
     var newChallengeText by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val db = remember {
+        Room.databaseBuilder(
+            context.applicationContext,
+            ChallengeDatabase::class.java, "challenge.db"
+        ).build()
+    }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            challenges = db.challengedao.getAllChallenges()
+        }
+    }
 
     Column(modifier = modifier.padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -44,8 +59,15 @@ fun ChallengeListScreen(navController: NavController, modifier: Modifier = Modif
             Button(
                 onClick = {
                     if (newChallengeText.isNotBlank()) {
-                        challenges = (challenges + Challenge(newChallengeText)).toMutableList()
-                        newChallengeText = ""
+                        coroutineScope.launch(Dispatchers.IO) {
+                            val newChallenge = ChallengeDTO(
+                                name = newChallengeText,
+                                id = 0
+                            )
+                            db.challengedao.insertChallenge(newChallenge)
+                            challenges = db.challengedao.getAllChallenges()
+                            newChallengeText = ""
+                        }
                     }
                 },
                 modifier = Modifier.padding(start = 8.dp)
@@ -60,7 +82,7 @@ fun ChallengeListScreen(navController: NavController, modifier: Modifier = Modif
             }
         }
 
-        Button(onClick = { 
+        Button(onClick = {
             val challengeNames = challenges.joinToString(",") { it.name }
             navController.navigate("wheelScreen/$challengeNames")
         }) {
