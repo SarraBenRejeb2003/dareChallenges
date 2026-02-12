@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dareWheel.challenge.presentation.viewmodel.WheelViewModel
-import com.example.darewheel.ui.theme.Pink40
-import com.example.darewheel.ui.theme.Purple40
+import com.example.dareWheel.ui.theme.Pink40
+import com.example.dareWheel.ui.theme.Purple40
 
 @Composable
 fun WheelScreen(

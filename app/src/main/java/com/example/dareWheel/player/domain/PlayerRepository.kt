@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface PlayerRepository {
     fun getAllPlayers(): Flow<List<PlayerEntity>>
     suspend fun insertPlayer(player: PlayerEntity)
+    suspend fun deletePlayer(player: PlayerEntity)
 }

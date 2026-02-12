@@ -16,4 +16,8 @@ class PlayerRepositoryImpl(private val playerDao: PlayerDao) : PlayerRepository 
     override suspend fun insertPlayer(player: PlayerEntity) {
         playerDao.insert(PlayerDTO(name = player.name))
     }
+
+    override suspend fun deletePlayer(player: PlayerEntity) {
+        playerDao.delete(PlayerDTO(id = player.id.toInt(), name = player.name))
+    }
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class ChallengeViewModel(private val challengeRepository: ChallengeRepository) : ViewModel() {
 
-    val challenges = mutableStateOf<List<ChallengeEntity>>(emptyList())
+    val challenges = mutableStateOf<List<ChallengeEntity>>(emptyList()) // TODO: This should be a StateFlow
 
     init {
         loadChallenges()
@@ -24,6 +24,13 @@ class ChallengeViewModel(private val challengeRepository: ChallengeRepository) :
     fun addChallenge(name: String) {
         viewModelScope.launch {
             challengeRepository.addChallenge(ChallengeEntity(id = "", name = name))
+            loadChallenges()
+        }
+    }
+
+    fun removeChallenge(challenge: ChallengeEntity) {
+        viewModelScope.launch {
+            challengeRepository.deleteChallenge(challenge)
             loadChallenges()
         }
     }

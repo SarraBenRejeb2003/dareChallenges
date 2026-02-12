@@ -30,4 +30,10 @@ class PlayerViewModel(private val playerRepository: PlayerRepository) : ViewMode
             playerRepository.insertPlayer(PlayerEntity(id = "", name = name))
         }
     }
+
+    fun removePlayer(player: PlayerEntity) {
+        viewModelScope.launch {
+            playerRepository.deletePlayer(player)
+        }
+    }
 }

@@ -12,4 +12,8 @@ class ChallengeRepositoryImpl(private val challengeDao: ChallengeDao) : Challeng
     override suspend fun addChallenge(challenge: ChallengeEntity) {
         challengeDao.insertChallenge(ChallengeDTO(name = challenge.name))
     }
+
+    override suspend fun deleteChallenge(challenge: ChallengeEntity) {
+        challengeDao.deleteChallenge(ChallengeDTO(id = challenge.id.toInt(), name = challenge.name))
+    }
 }

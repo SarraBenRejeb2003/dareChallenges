@@ -12,9 +12,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -93,11 +96,22 @@ fun GameSetupScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(players) { player ->
-                            Card(modifier = Modifier.fillMaxWidth()) {
-                                Text(
-                                    text = player.name,
-                                    modifier = Modifier.padding(16.dp)
-                                )
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(text = player.name)
+                                    IconButton(onClick = { playerViewModel.removePlayer(player) }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Remove player")
+                                    }
+                                }
                             }
                         }
                     }
@@ -143,11 +157,22 @@ fun GameSetupScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(challenges) { challenge ->
-                            Card(modifier = Modifier.fillMaxWidth()) {
-                                Text(
-                                    text = challenge.name,
-                                    modifier = Modifier.padding(16.dp)
-                                )
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(text = challenge.name)
+                                    IconButton(onClick = { challengeViewModel.removeChallenge(challenge) }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Remove challenge")
+                                    }
+                                }
                             }
                         }
                     }

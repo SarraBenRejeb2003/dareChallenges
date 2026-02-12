@@ -1,6 +1,7 @@
 package com.example.dareWheel.player.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
@@ -12,4 +13,7 @@ interface PlayerDao {
 
     @Query("SELECT * FROM players")
     fun getAllPlayers(): Flow<List<PlayerDTO>>
+
+    @Delete
+    suspend fun delete(player: PlayerDTO)
 }

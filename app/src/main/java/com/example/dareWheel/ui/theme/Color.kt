@@ -1,4 +1,4 @@
-package com.example.darewheel.ui.theme
+package com.example.dareWheel.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
